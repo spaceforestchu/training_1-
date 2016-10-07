@@ -15,10 +15,29 @@ module.exports = {
   },
 
   getById: function(id){
-
+    return new Promise(function(resolve, reject){
+      Place.findById(id, function(err, place){
+        if (err){
+          reject(err)
+          return
+        }
+        resolve(place)
+        return
+      })
+    })
   },
 
   post: function(params){
+    return new Promise(function(resolve, reject){
+      Place.create(params, function(err, place){
+        if(err){
+          reject(err)
+          return
+        }
+        resolve(place)
+        return
+      })
+    })
 
   },
 

@@ -42,8 +42,17 @@ router.get('/:resource', function(req, res, next) {
 router.get('/:resource/:id', function(req, res, next){
   var resource = req.params.resource
   var id = req.params.id
+  var controller = controllers[resource]
 
-  ProfileController.get(id)
+  if(controller == null){
+    res.json({
+      confirmation: 'fail',
+      message: 'Invalid Resource check your spelling'
+    })
+    return
+  }
+
+  controller.getById(id)
   .then(function(result){
     res.json({
       confirmation: 'success',
@@ -54,7 +63,7 @@ router.get('/:resource/:id', function(req, res, next){
   .catch(function(err){
     res.json({
       confirmation: 'fail',
-      message: err
+      message: 'Not Found'
     })
     return
   })
@@ -63,6 +72,25 @@ router.get('/:resource/:id', function(req, res, next){
 
 router.post('/:resource', function(req, res, next){
   var resource = req.params.resource
+  var controller = controllers[resource]
+  var data = req.body
+  
+  controller.post(data)
+  .then(function(profile){
+    res.json({
+      confirmation: 'success',
+      result: profile
+    })
+    return
+  })
+  .catch(function(err){
+    res.json({
+      confirmation: 'fail',
+      message: err
+    })
+    return
+  })
+
   // if (resource == 'profile'){
   //  Profile.create(req.body, function(err, result){
   //    if (err) {

@@ -6,7 +6,7 @@ module.exports = {
     return new Promise(function(resolve, reject){
       Profile.find(params, function(err, profiles){
         if (err) {
-            reject(err);
+            reject(err)
             return
         }
         resolve(profiles)
@@ -15,14 +15,34 @@ module.exports = {
   },
 
   getById: function(id){
+    return new Promise(function(resolve, reject){
+      Profile.findById(id, function(err, profile){
+        if (err){
+          reject(err)
+          return
+        }
+        resolve(profile)
+        return
+      })
+    })
 
   },
 
   post: function(params){
+    return new Promise(function(resolve, reject){
+      Profile.create(params, function(err, profile){
+        if(err){
+          reject(err)
+          return
+        }
+        resolve(profile)
+        return
+      })
+    })
 
   },
 
   put: function(id, params){
-
+    return new Promise(function(resolve, reject))
   }
 }
