@@ -42,6 +42,15 @@ module.exports = {
   },
 
   put: function(id, params){
-
+    return new Promise(function(resolve, reject){
+      Place.findByIdAndUpdate(id, params, {new: true }, function(err, profile){
+        if(err){
+          reject(err)
+          return
+        }
+        resolve(profile)
+        return
+      })
+    })
   }
 }

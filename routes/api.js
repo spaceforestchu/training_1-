@@ -74,7 +74,7 @@ router.post('/:resource', function(req, res, next){
   var resource = req.params.resource
   var controller = controllers[resource]
   var data = req.body
-  
+
   controller.post(data)
   .then(function(profile){
     res.json({
@@ -90,45 +90,55 @@ router.post('/:resource', function(req, res, next){
     })
     return
   })
-
-  // if (resource == 'profile'){
-  //  Profile.create(req.body, function(err, result){
-  //    if (err) {
-  //      res.json({
-  //        confirmation: 'fail',
-  //        message: err
-  //      })
-  //      return
-  //    }
-  //    res.json({
-  //      confirmation: 'success',
-  //      result: result
-  //    })
-  //    return
-  //  })
-  // }
 })
 
 router.put('/:resource/:id', function(req, res, next){
   var resource = req.params.resource
   var id = req.params.resouce
+  var controller = controllers[resource]
+  var data = req.body
 
-  if(resource == 'profile'){
-    Profile.findByIdAndUpdate(id, req.body, {new: true}, function(err, result){
-      if (err) {
-        res.json({
-          confirmation: 'fail',
-          message: err
-        })
-        return
-      }
-      res.json({
-        confirmation: 'success',
-        result: result
-      })
-      return
+  if(controller == null){
+    res.json({
+      confirmation: 'fail',
+      message: 'Invalid Resource check your spelling'
     })
+    return
   }
+
+
+  controller.put(id, data)
+  .then(function(profile){
+    res.json({
+      confirmation: 'success',
+      result: profile
+    })
+    return
+  })
+  .catch(function(err){
+    res.json({
+      confirmation: 'fail',
+      message: err
+    })
+    return
+  })
+
+  // if(resource == 'profile'){
+  //   Profile.findByIdAndUpdate(id, req.body, {new: true}, function(err, result){
+  //     if (err) {
+  //       res.json({
+  //         confirmation: 'fail',
+  //         message: err
+  //       })
+  //       return
+  //     }
+  //     res.json({
+  //       confirmation: 'success',
+  //       result: result
+  //     })
+  //     return
+  //   })
+  // }
 })
 
 module.exports = router;
