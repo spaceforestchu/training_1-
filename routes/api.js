@@ -1,13 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Profile = require('../models/Profile')
-var Place = require('../models/Place')
-var ProfileController = require('../controllers/ProfileController')
-var PlaceController = require('../controllers/PlaceController')
-var controllers = {
-  profile: ProfileController,
-  place: PlaceController
-}
+var controllers = require('../controllers')
 
 router.get('/:resource', function(req, res, next) {
   var resource = req.params.resource
@@ -122,23 +115,6 @@ router.put('/:resource/:id', function(req, res, next){
     })
     return
   })
-
-  // if(resource == 'profile'){
-  //   Profile.findByIdAndUpdate(id, req.body, {new: true}, function(err, result){
-  //     if (err) {
-  //       res.json({
-  //         confirmation: 'fail',
-  //         message: err
-  //       })
-  //       return
-  //     }
-  //     res.json({
-  //       confirmation: 'success',
-  //       result: result
-  //     })
-  //     return
-  //   })
-  // }
 })
 
 module.exports = router;
