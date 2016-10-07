@@ -4,12 +4,18 @@ var Profile = require('../models/Profile')
 var Place = require('../models/Place')
 var ProfileController = require('../controllers/ProfileController')
 var PlaceController = require('../controllers/PlaceController')
+var controllers = {
+  profile: ProfileController,
+  place: PlaceController
+}
+
+
 
 router.get('/:resource', function(req, res, next) {
   var resource = req.params.resource
+  var controller = controllers[resource]
 
-  if (resource == 'place') {
-    PlaceController.get(null)
+    controller.get(null)
     .then(function(results){
       res.json({
         confirmation: 'success',
@@ -24,25 +30,6 @@ router.get('/:resource', function(req, res, next) {
       })
       return
     })
-   }
-
-  if (resource == 'profile') {
-    ProfileController.get(null)
-    .then(function(results){
-      res.json({
-        confirmation: 'success',
-        results: results
-      })
-      return
-    })
-    .catch(function(err){
-      res.json({
-        confirmation: 'fail',
-        message: err
-      })
-      return
-    })
-   }
 
 });
 
