@@ -9,11 +9,17 @@ var controllers = {
   place: PlaceController
 }
 
-
-
 router.get('/:resource', function(req, res, next) {
   var resource = req.params.resource
   var controller = controllers[resource]
+
+  if(controller == null){
+    res.json({
+      confirmation: 'fail',
+      message: 'Invalid Resource check your spelling'
+    })
+    return
+  }
 
     controller.get(null)
     .then(function(results){
