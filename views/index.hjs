@@ -7,7 +7,19 @@
   <body>
     <h1>{{ title }}</h1>
     <p>Welcome to {{ title }}</p>
-    <form action='/api/profile' method='post'>
+
+    <h2>Login</h2>
+    <form action='/account/login' method='post'>
+      <input type='text' name='email' placeholder='Email'  /><br />
+      <input type='text' name='password' placeholder='Password'  /><br />
+      <input type='submit' value='Login'  />
+    </form>
+
+    <br /><br /><br />
+
+
+    <h2>Create User</h2>
+    <form action='/account/register' method='post'>
       <input type='text' name='firstName' placeholder='First Name'  /><br />
       <input type='text' name='lastName' placeholder='Last Name'  /><br />
       <input type='text' name='email' placeholder='Email'  /><br />
@@ -15,7 +27,7 @@
       <input type='submit' value='Submit'  />
     </form>
 
-    <p>Create Place</p>
+    <h2>Create Place</h2>
     <form action='/api/place' method='post'>
       <input type='text' name='name' placeholder='Name'  /><br />
       <input type='text' name='description' placeholder='Description'  /><br />

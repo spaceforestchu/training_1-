@@ -4,14 +4,25 @@ var bcrypt = require('bcrypt')
 
 
 module.exports = {
-  get: function(params){
+  get: function(params, isRaw){
     return new Promise(function(resolve, reject){
       Profile.find(params, function(err, profiles){
         if (err) {
             reject(err)
             return
         }
-        resolve(profiles)
+
+        if (isRaw == true) {
+          resolve(profiles)
+          return
+        }
+
+        var list = []
+        for (var i = 0; i < profiles.length; i++){
+          var profile = profiles[i]
+          list.push(profile.summary())
+        }
+        resolve(list)
       })
     })
   },
@@ -23,7 +34,7 @@ module.exports = {
           reject(err)
           return
         }
-        resolve(profile)
+        resolve(profile.summary())
         return
       })
     })
@@ -35,13 +46,13 @@ module.exports = {
 
       var password = params.password
       params['password'] = bcrypt.hashSync(password, 10)
-      
+
       Profile.create(params, function(err, profile){
         if(err){
           reject(err)
           return
         }
-        resolve(profile)
+        resolve(profile.summary())
         return
       })
     })
@@ -55,7 +66,7 @@ module.exports = {
           reject(err)
           return
         }
-        resolve(profile)
+        resolve(profile.summary())
         return
       })
     })

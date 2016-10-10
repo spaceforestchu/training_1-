@@ -13,8 +13,7 @@ router.get('/:resource', function(req, res, next) {
     })
     return
   }
-
-    controller.get(null)
+    controller.get(null, false)
     .then(function(results){
       res.json({
         confirmation: 'success',
@@ -98,7 +97,6 @@ router.put('/:resource/:id', function(req, res, next){
     })
     return
   }
-
 
   controller.put(id, data)
   .then(function(profile){
