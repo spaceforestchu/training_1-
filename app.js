@@ -6,19 +6,18 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var sessions = require('client-sessions');
-
+require('dotenv').config();
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
 var account = require('./routes/account');
-var geo = require('./routes/geo');
 
-var dbUrl = 'mongodb://localhost/local-chat'
-mongoose.connect(dbUrl, function(err, res){
+
+mongoose.connect(process.env.MONGO_DB, function(err, res){
   if (err) {
     console.log('DB Connection Failed: ' + err);
   } else {
-    console.log('DB Connecton Success: ' + dbUrl);
+    console.log('DB Connecton Success: ' + process.env.MONGO_DB);
   }
 })
 
@@ -47,7 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/api', api);
 app.use('/account', account)
-app.use('/geo', geo)
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

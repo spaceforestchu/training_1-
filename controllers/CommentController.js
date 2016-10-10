@@ -11,7 +11,19 @@ module.exports = {
 					return
 				}
 
-				resolve(comments)
+				if (isRaw == true){
+						resolve(comments)
+						return
+				}
+
+				var list = []
+				for (var i = 0; i < comments.length; i++) {
+					var list = comments[i]
+					list.push(list.summary())
+				}
+
+
+				resolve(list)
 			})
 		})
 	},
@@ -24,7 +36,7 @@ module.exports = {
 					return
 				}
 
-				resolve(comment)
+				resolve(comment.summary())
 			})
 		})
 	},
@@ -37,7 +49,7 @@ module.exports = {
 					return
 				}
 
-				resolve(comment)
+				resolve(comment.summary())
 			})
 		})
 	},
@@ -50,7 +62,7 @@ module.exports = {
 					return
 				}
 
-				resolve(comment)
+				resolve(comment.summary())
 			})
 		})
 

@@ -6,4 +6,14 @@ var CommentSchema = new mongoose.Schema({
 	timestamp: {type:Date, default:Date.now}
 })
 
+CommentSchema.methods.summary = function() {
+	var summary = {
+			text: this.text,
+			profile: this. profile,
+			timestamp: this.timestamp,
+			id: this._id
+	}
+	return summary
+}
+
 module.exports = mongoose.model('CommentSchema', CommentSchema)

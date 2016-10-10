@@ -1,17 +1,27 @@
 var Place = require('../models/Place')
 var Promise = require('bluebird')
-var superagent = require('superagent');
-
+var Request = require('../utils/Request')
 
 module.exports = {
   get: function(params, isRaw){
     return new Promise(function(resolve, reject){
-      Place.find(params, function(err, Places){
+      Place.find(params, function(err, places){
         if (err) {
             reject(err);
             return
         }
-        resolve(Places)
+
+        if (isRaw == true){
+            resolve(places)
+            return
+        }
+
+        var list = []
+        for (var i = 0; i < places.length; i++){
+          var place = places[i]
+          list.push(place.summary())
+        }
+        resolve(list)
       })
     })
   },
@@ -23,7 +33,7 @@ module.exports = {
           reject(err)
           return
         }
-        resolve(place)
+        resolve(place.summary())
         return
       })
     })
@@ -42,37 +52,66 @@ module.exports = {
       var url = 'https://maps.googleapis.com/maps/api/geocode/json'
 
       var geoParams = {
-        key: 'AIzaSyBHDx7B-4HbrEd3WU3trCsQ9blAabvW14E',
+        key: process.env.GOOGLE_MAP_API,
         address: address,
       }
 
-     superagent
-     .get(url)
-     .query(geoParams)
-     .set('Accept', 'text/json')
-     .end(function(err, response){
-       if (err) {
-           reject(err)
-           return
-       }
+      Request.get(url, geoParams, function(err, response){
 
-       var results = response.body.results
-       var locationInfo = results[0]
-       var geometry = locationInfo.geometry
-       var latLng = geometry.location
-
-//       res.send(latLng)
-        params['geo'] = [latLng.lat, latLng.lng]
-
-        Place.create(params, function(err, place){
-          if(err){
-            reject(err)
-            return
-          }
-          resolve(place)
+        if (err) {
+          reject(err)
           return
-        })
-     })
+        }
+
+         var results = response.results
+
+
+        var locationInfo = results[0]
+        var geometry = locationInfo.geometry
+        var latLng = geometry.location
+
+ //       res.send(latLng)
+         params['geo'] = [latLng.lat, latLng.lng]
+
+         Place.create(params, function(err, place){
+           if(err){
+             reject(err)
+             return
+           }
+           resolve(place.summary())
+           return
+         })
+      })
+
+
+
+//      superagent
+//      .get(url)
+//      .query(geoParams)
+//      .set('Accept', 'text/json')
+//      .end(function(err, response){
+//        if (err) {
+//            reject(err)
+//            return
+//        }
+//
+//        var results = response.body.results
+//        var locationInfo = results[0]
+//        var geometry = locationInfo.geometry
+//        var latLng = geometry.location
+//
+// //       res.send(latLng)
+//         params['geo'] = [latLng.lat, latLng.lng]
+//
+//         Place.create(params, function(err, place){
+//           if(err){
+//             reject(err)
+//             return
+//           }
+//           resolve(place.summary())
+//           return
+//         })
+//      })
 
    })
 
