@@ -6,12 +6,18 @@ router.get('/', function(req, res, next){
 
   var address = req.query.address
 
-   var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBHDx7B-4HbrEd3WU3trCsQ9blAabvW14E'
+   var url = 'https://maps.googleapis.com/maps/api/geocode/json'
+
+   var params = {
+     key: 'AIzaSyBHDx7B-4HbrEd3WU3trCsQ9blAabvW14E',
+     address: address,
+   }
+
 
   superagent
   .get(url)
-  .query(null)
-  .set('Acceot', 'text/json')
+  .query(params)
+  .set('Accept', 'text/json')
   .end(function(err, response){
     if (err) {
       res.json({
